@@ -3,6 +3,7 @@ package com.example.challengechapterfour
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,10 +32,8 @@ class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote
 
     override fun onBindViewHolder(holder: AdapterNote.ViewHolder, position: Int) {
 
-
         holder.itemView.tv_judul.text = listNote[position].title.toString()
         holder.itemView.tv_content.text = listNote[position].content.toString()
-
 
         holder.itemView.btn_delete.setOnClickListener {
             noteDb = NoteDatabase.getInstance(it.context)
@@ -48,11 +47,13 @@ class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote
                         (holder.itemView.context as HomeFragment).activity?.runOnUiThread {
                             if(deleteResult != null){
                                 Toast.makeText(it.context, "Data Berhasil dihapus", Toast.LENGTH_LONG).show()
-                                (holder.itemView.context as HomeFragment).getNoteData()
+                                (holder.itemView.context as HomeFragment).activity?.recreate()
                             }else{
                                 Toast.makeText(it.context, "Data Gagal dihapus", Toast.LENGTH_LONG).show()
                             }
+//                            (holder.itemView.context as HomeFragment).getNoteData()
                         }
+
                     }
                 }
                 .setNegativeButton("Tidak"){dialogInterface:DialogInterface, i: Int ->
@@ -67,35 +68,47 @@ class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote
             noteDb = NoteDatabase.getInstance(it.context)
             val customDialogEdit = LayoutInflater.from(it.context).inflate(R.layout.custom_dialog_edit_note, null, false)
 
-//            val getDataNote = arguments.
-//            val getDataNote2 = intent.
-
             val ADBuilder = AlertDialog.Builder(it.context)
                 .setView(customDialogEdit)
                 .create()
             customDialogEdit.btn_update_note.setOnClickListener {
 
+                val title = listNote[position].title
+                val content = listNote[position].content
+
+                customDialogEdit.et_update_judul.hint = title
+                customDialogEdit.et_update_catatan.hint = content
+
                 if(customDialogEdit.et_update_catatan.text.length > 0 && customDialogEdit.et_update_judul.text.length > 0){
 
-                    val newTitle = listNote[position].title.toString()
-                    val newContent = listNote[position].content.toString()
+                    val newTitle = customDialogEdit.et_update_judul.text.toString()
+                    val newContent = customDialogEdit.et_update_catatan.text.toString()
 
                     GlobalScope.async {
-                        val updateNow = noteDb?.noteDao()?.updateNote(Note(null, newTitle, newContent))
 
-//                            if(updateNow != 0){
-//
-//                            }else{
-//                                Toast.makeText(it.context, "Data ${listNote[position].title.toString()} Gagal di edit", Toast.LENGTH_SHORT).show()
-//                            }
+                        listNote[position].title = newTitle
+                        listNote[position].content = newContent
+                        val updateNow = noteDb?.noteDao()?.updateNote(listNote[position])
+
+                        (holder.itemView.context as HomeFragment).activity?.runOnUiThread(){
+                            if(updateNow != null){
+                                Toast.makeText(it.context, "Data Berhasil diupdate", Toast.LENGTH_LONG).show()
+                                (holder.itemView.context as HomeFragment).getNoteData()
+                            }else{
+                                Toast.makeText(it.context, "Data $title Gagal di edit", Toast.LENGTH_SHORT).show()
+                            }
+//                            (holder.itemView.context as HomeFragment).getNoteData()
+                        }
                     }
-                    Toast.makeText(it.context, "Data ${listNote[position].title.toString()} Berhasil di edit", Toast.LENGTH_SHORT).show()
+
+                    Toast.makeText(it.context, "Data ${title.toString()} Berhasil di edit", Toast.LENGTH_SHORT).show()
 
                 }else{
                     Toast.makeText(it.context, "Mohon input secara lengkap", Toast.LENGTH_LONG).show()
                 }
             }
                 ADBuilder.show()
+
         }
 
 

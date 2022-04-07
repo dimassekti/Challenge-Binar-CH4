@@ -24,7 +24,7 @@ class SplashFragment : Fragment() {
 
         Handler().postDelayed({
             Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_loginFragment)
-        },3000)
+        },2500)
     }
 
 }

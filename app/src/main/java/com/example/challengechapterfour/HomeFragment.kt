@@ -71,12 +71,13 @@ class HomeFragment : Fragment() {
 
                                 val judul = customDialogAdd.et_input_judul.text.toString()
                                 val catatan = customDialogAdd.et_input_catatan.text.toString()
-                                val data = noteDb?.noteDao()?.insertNote(Note(null, judul, catatan))
+                                noteDb?.noteDao()?.insertNote(Note(null, judul, catatan))
 
                              }
 
                             Toast.makeText(requireContext(), "Data Berhasil di Input", Toast.LENGTH_LONG).show()
                             ADBuilder.dismiss()
+                            activity?.recreate()
 
                         }else{
                             Toast.makeText(requireContext(), "Mohon input secara lengkap", Toast.LENGTH_LONG).show()
