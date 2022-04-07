@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.custom_dialog_edit_note.view.*
 import kotlinx.android.synthetic.main.item_adapter_note.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote.ViewHolder>(){
 
@@ -43,11 +44,13 @@ class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote
                 .setMessage("Yakin Hapus?")
                 .setPositiveButton("Ya"){ dialogInterface: DialogInterface, i: Int ->
                     GlobalScope.async {
+
                         val deleteResult = noteDb?.noteDao()?.deleteNote(listNote[position])
-                        (holder.itemView.context as HomeFragment).activity?.runOnUiThread {
+
+                        (holder.itemView.context as MainActivity).runOnUiThread {
                             if(deleteResult != null){
                                 Toast.makeText(it.context, "Data Berhasil dihapus", Toast.LENGTH_LONG).show()
-                                (holder.itemView.context as HomeFragment).activity?.recreate()
+                                (holder.itemView.context as MainActivity).recreate()
                             }else{
                                 Toast.makeText(it.context, "Data Gagal dihapus", Toast.LENGTH_LONG).show()
                             }
@@ -59,7 +62,7 @@ class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote
                 .setNegativeButton("Tidak"){dialogInterface:DialogInterface, i: Int ->
                     dialogInterface.dismiss()
                 }
-                ADBuilder.show()
+                .show()
 
         }
 
@@ -67,17 +70,19 @@ class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote
         holder.itemView.btn_update.setOnClickListener {
             noteDb = NoteDatabase.getInstance(it.context)
             val customDialogEdit = LayoutInflater.from(it.context).inflate(R.layout.custom_dialog_edit_note, null, false)
+            val title = listNote[position].title
+            val content = listNote[position].content
 
+            customDialogEdit.et_update_judul.hint = title
+            customDialogEdit.et_update_catatan.hint = content
+
+//            edit data
             val ADBuilder = AlertDialog.Builder(it.context)
                 .setView(customDialogEdit)
                 .create()
+
+//            custom dialog untuk edit
             customDialogEdit.btn_update_note.setOnClickListener {
-
-                val title = listNote[position].title
-                val content = listNote[position].content
-
-                customDialogEdit.et_update_judul.hint = title
-                customDialogEdit.et_update_catatan.hint = content
 
                 if(customDialogEdit.et_update_catatan.text.length > 0 && customDialogEdit.et_update_judul.text.length > 0){
 
@@ -90,21 +95,22 @@ class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote
                         listNote[position].content = newContent
                         val updateNow = noteDb?.noteDao()?.updateNote(listNote[position])
 
-                        (holder.itemView.context as HomeFragment).activity?.runOnUiThread(){
-                            if(updateNow != null){
+                        (customDialogEdit.context as MainActivity).runOnUiThread(){
+                            if(updateNow != 0){
                                 Toast.makeText(it.context, "Data Berhasil diupdate", Toast.LENGTH_LONG).show()
-                                (holder.itemView.context as HomeFragment).getNoteData()
+                                ADBuilder.dismiss()
+                                (customDialogEdit.context as MainActivity).recreate()
                             }else{
                                 Toast.makeText(it.context, "Data $title Gagal di edit", Toast.LENGTH_SHORT).show()
                             }
-//                            (holder.itemView.context as HomeFragment).getNoteData()
+                            (customDialogEdit.context as MainActivity).recreate()
+
                         }
+
                     }
 
-                    Toast.makeText(it.context, "Data ${title.toString()} Berhasil di edit", Toast.LENGTH_SHORT).show()
-
                 }else{
-                    Toast.makeText(it.context, "Mohon input secara lengkap", Toast.LENGTH_LONG).show()
+                    Toast.makeText(it.context, "Mohon input data secara lengkap", Toast.LENGTH_LONG).show()
                 }
             }
                 ADBuilder.show()
