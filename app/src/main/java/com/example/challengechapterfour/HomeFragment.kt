@@ -73,7 +73,6 @@ class HomeFragment : Fragment() {
                                 val catatan = customDialogAdd.et_input_catatan.text.toString()
                                 val data = noteDb?.noteDao()?.insertNote(Note(null, judul, catatan))
 
-                                getNoteData()
                              }
 
                             Toast.makeText(requireContext(), "Data Berhasil di Input", Toast.LENGTH_LONG).show()
@@ -105,12 +104,16 @@ class HomeFragment : Fragment() {
         }
     }
 
+
+
     override fun onResume() {
         super.onResume()
+        getNoteData()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        NoteDatabase.destroyInstance()
     }
 
 

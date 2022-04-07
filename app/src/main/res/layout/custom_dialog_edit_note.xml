@@ -15,14 +15,12 @@
     <EditText
         android:id="@+id/et_update_judul"
         android:hint="Masukkan Judul"
-        android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/et_update_catatan"
         android:hint="Masukkan Catatan"
-        android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
