@@ -51,10 +51,10 @@ class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote
                             if(deleteResult != null){
                                 Toast.makeText(it.context, "Data Berhasil dihapus", Toast.LENGTH_LONG).show()
                                 (holder.itemView.context as MainActivity).recreate()
+                                //                            (holder.itemView.context as HomeFragment).getNoteData()
                             }else{
                                 Toast.makeText(it.context, "Data Gagal dihapus", Toast.LENGTH_LONG).show()
                             }
-//                            (holder.itemView.context as HomeFragment).getNoteData()
                         }
 
                     }

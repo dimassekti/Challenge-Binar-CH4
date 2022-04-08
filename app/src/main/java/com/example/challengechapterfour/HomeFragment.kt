@@ -51,8 +51,7 @@ class HomeFragment : Fragment() {
         tv_header.setText("Hello $usernameIn")
 
         tv_logout.setOnClickListener {
-//            prefsHome.edit().clear().apply()
-//            prefsTemp.edit().clear().apply()
+            prefsTemp.edit().clear().apply()
             onDestroy()
             Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_loginFragment)
         }
@@ -99,6 +98,9 @@ class HomeFragment : Fragment() {
         GlobalScope.launch {
             val listData = noteDb?.noteDao()?.getAllNote()
             activity?.runOnUiThread {
+                if(listData?.size!! < 1){
+                    tv_kosong.setText("Belum ada catatan")
+                }
                 listData.let {
                     rv_note.adapter = AdapterNote(it!!)
                 }
