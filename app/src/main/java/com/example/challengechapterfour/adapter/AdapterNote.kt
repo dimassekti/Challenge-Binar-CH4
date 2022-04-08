@@ -1,21 +1,20 @@
-package com.example.challengechapterfour
+package com.example.challengechapterfour.adapter
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.custom_dialog_add_note.view.*
+import com.example.challengechapterfour.MainActivity
+import com.example.challengechapterfour.database.NoteDatabase
+import com.example.challengechapterfour.R
+import com.example.challengechapterfour.note.Note
 import kotlinx.android.synthetic.main.custom_dialog_edit_note.view.*
 import kotlinx.android.synthetic.main.item_adapter_note.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote.ViewHolder>(){
 
@@ -25,13 +24,13 @@ class AdapterNote (val listNote : List<Note>) : RecyclerView.Adapter<AdapterNote
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterNote.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val viewItem = LayoutInflater.from(parent.context).inflate(R.layout.item_adapter_note, parent, false)
 
         return ViewHolder(viewItem)
     }
 
-    override fun onBindViewHolder(holder: AdapterNote.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.itemView.tv_judul.text = listNote[position].title.toString()
         holder.itemView.tv_content.text = listNote[position].content.toString()

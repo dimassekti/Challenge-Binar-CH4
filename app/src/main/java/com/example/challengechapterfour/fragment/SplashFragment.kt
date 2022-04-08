@@ -1,4 +1,4 @@
-package com.example.challengechapterfour
+package com.example.challengechapterfour.fragment
 
 import android.os.Bundle
 import android.os.Handler
@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import com.example.challengechapterfour.R
 
 
 class SplashFragment : Fragment() {
@@ -14,6 +15,7 @@ class SplashFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
+
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_splash, container, false)
@@ -21,6 +23,10 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        supportActionBar?.hide()
+        (getActivity()?.getWindow()?.getDecorView())?.systemUiVisibility;
+
 
         Handler().postDelayed({
             Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_loginFragment)

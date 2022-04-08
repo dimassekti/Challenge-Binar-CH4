@@ -1,4 +1,4 @@
-package com.example.challengechapterfour
+package com.example.challengechapterfour.note
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
@@ -18,4 +18,5 @@ data class Note (
 
     @ColumnInfo(name = "content")
     var content : String ,
+
 ) : Parcelable

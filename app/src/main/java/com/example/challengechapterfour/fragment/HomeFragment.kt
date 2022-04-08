@@ -1,4 +1,4 @@
-package com.example.challengechapterfour
+package com.example.challengechapterfour.fragment
 
 import android.app.AlertDialog
 import android.content.Context
@@ -11,7 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.custom_dialog_add_note.*
+import com.example.challengechapterfour.R
+import com.example.challengechapterfour.adapter.AdapterNote
+import com.example.challengechapterfour.database.NoteDatabase
+import com.example.challengechapterfour.note.Note
 import kotlinx.android.synthetic.main.custom_dialog_add_note.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.GlobalScope
@@ -48,7 +51,7 @@ class HomeFragment : Fragment() {
         val emailIn = prefsHome.getString("EMAIL", "")
         val passwordIn = prefsHome.getString("PASSWORD", "")
 
-        tv_header.setText("Hello $usernameIn")
+        tv_header.setText("@$usernameIn")
 
         tv_logout.setOnClickListener {
             prefsTemp.edit().clear().apply()

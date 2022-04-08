@@ -1,4 +1,4 @@
-package com.example.challengechapterfour
+package com.example.challengechapterfour.note
 
 import androidx.room.*
 
@@ -17,3 +17,4 @@ interface NoteDao {
     fun updateNote(note: Note) : Int
 
 }
+
