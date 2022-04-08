@@ -50,10 +50,12 @@ class LoginFragment : Fragment() {
     fun login(){
         val dataEmail = et_input_email.text.toString()
         val dataPassword = et_input_password.text.toString()
+        val username = prefsLogin.getString("USERNAME", "")
 
         if(dataEmail == prefsLogin.getString("EMAIL", "") && dataPassword == prefsLogin.getString("PASSWORD", "") && dataEmail.length > 0 && dataPassword.length > 0){
             prefsTemp.edit().putString("PASSWORD", dataPassword).apply()
             prefsTemp.edit().putString("EMAIL", dataEmail).apply()
+            Toast.makeText(requireContext(), "Selamat Datang $username", Toast.LENGTH_LONG).show()
             view?.let { Navigation.findNavController(it).navigate(R.id.action_loginFragment_to_homeFragment) }
         }else{
             Toast.makeText(requireContext(), "Username atau Password Masih Salah", Toast.LENGTH_LONG).show()

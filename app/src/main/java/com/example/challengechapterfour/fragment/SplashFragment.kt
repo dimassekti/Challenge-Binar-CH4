@@ -24,9 +24,8 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        supportActionBar?.hide()
-        (getActivity()?.getWindow()?.getDecorView())?.systemUiVisibility;
-
+//        activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        activity?.actionBar?.hide()
 
         Handler().postDelayed({
             Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_loginFragment)

@@ -54,6 +54,7 @@
                     android:id="@+id/et_input_password"
                     android:hint="Masukan Password"
                     android:background="@android:color/transparent"
+                    android:inputType="textPassword"
                     android:padding="10dp"
                     android:textSize="16dp"
                     android:layout_width="match_parent"

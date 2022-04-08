@@ -71,6 +71,7 @@
                 android:background="@android:color/transparent"
                 android:padding="10dp"
                 android:textSize="16dp"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -89,6 +90,7 @@
                 android:background="@android:color/transparent"
                 android:padding="10dp"
                 android:textSize="16dp"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -98,6 +100,7 @@
         <Button
             android:id="@+id/btn_register"
             android:text="Register"
+            android:backgroundTint="@color/cardview_dark_background"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
