@@ -16,5 +16,7 @@ interface NoteDao {
     @Update
     fun updateNote(note: Note) : Int
 
+
+
 }
 

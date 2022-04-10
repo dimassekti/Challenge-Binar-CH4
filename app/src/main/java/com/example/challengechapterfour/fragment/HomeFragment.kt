@@ -24,8 +24,7 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
-    lateinit var prefsHome : SharedPreferences
-    lateinit var prefsTemp : SharedPreferences
+    lateinit var prefs : SharedPreferences
     var noteDb : NoteDatabase? = null
 
     override fun onCreateView(
@@ -40,21 +39,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        prefsHome = requireContext().getSharedPreferences("SF", Context.MODE_PRIVATE)
-        prefsTemp = requireContext().getSharedPreferences("SFTEMP", Context.MODE_PRIVATE)
+        prefs = requireContext().getSharedPreferences("SF", Context.MODE_PRIVATE)
 
         noteDb = NoteDatabase.getInstance(requireContext())
 
         getNoteData()
 
-        val usernameIn = prefsHome.getString("USERNAME", "")
-        val emailIn = prefsHome.getString("EMAIL", "")
-        val passwordIn = prefsHome.getString("PASSWORD", "")
+        val usernameIn = prefs.getString("USERNAME", "")
+        val emailIn = prefs.getString("EMAIL", "")
+        val passwordIn = prefs.getString("PASSWORD", "")
 
-        tv_header.setText("@$usernameIn")
+        tv_header.setText("$emailIn")
 
         tv_logout.setOnClickListener {
-            prefsTemp.edit().clear().apply()
+            prefs.edit().clear().apply()
             onDestroy()
             Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_loginFragment)
         }

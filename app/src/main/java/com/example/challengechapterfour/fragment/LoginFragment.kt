@@ -10,13 +10,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.challengechapterfour.R
+import com.example.challengechapterfour.database.UserDatabase
 import kotlinx.android.synthetic.main.fragment_login.*
 
 
 class LoginFragment : Fragment() {
 
-    lateinit var prefsLogin : SharedPreferences
-    lateinit var prefsTemp : SharedPreferences
+    private var userDb : UserDatabase? = null
+
+    lateinit var prefs : SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,10 +31,10 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        prefsTemp = requireContext().getSharedPreferences("SFTEMP", Context.MODE_PRIVATE)
-        prefsLogin = requireContext().getSharedPreferences("SF", Context.MODE_PRIVATE)
+        prefs = requireContext().getSharedPreferences("SF", Context.MODE_PRIVATE)
 
-        if(requireContext().getSharedPreferences("SFTEMP", Context.MODE_PRIVATE).contains("EMAIL") && requireContext().getSharedPreferences("SF", Context.MODE_PRIVATE).contains("USERNAME")){
+
+        if(requireContext().getSharedPreferences("SF", Context.MODE_PRIVATE).contains("EMAIL") && requireContext().getSharedPreferences("SF", Context.MODE_PRIVATE).contains("PASSWORD")){
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_homeFragment)
         }
 
@@ -44,22 +46,36 @@ class LoginFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
-
     }
 
     fun login(){
-        val dataEmail = et_input_email.text.toString()
-        val dataPassword = et_input_password.text.toString()
-        val username = prefsLogin.getString("USERNAME", "")
 
-        if(dataEmail == prefsLogin.getString("EMAIL", "") && dataPassword == prefsLogin.getString("PASSWORD", "") && dataEmail.length > 0 && dataPassword.length > 0){
-            prefsTemp.edit().putString("PASSWORD", dataPassword).apply()
-            prefsTemp.edit().putString("EMAIL", dataEmail).apply()
-            Toast.makeText(requireContext(), "Selamat Datang $username", Toast.LENGTH_LONG).show()
-            view?.let { Navigation.findNavController(it).navigate(R.id.action_loginFragment_to_homeFragment) }
+
+        if(et_input_email.text.isNotEmpty() && et_input_password.text.isNotEmpty()){
+
+            userDb = UserDatabase.getInstance(requireContext())
+
+            val dataEmail = et_input_email.text.toString()
+            val dataPassword = et_input_password.text.toString()
+
+            val userCheck = userDb?.UserDao()?.checkLogin(dataEmail, dataPassword)
+
+            if (userCheck.isNullOrEmpty()){
+                Toast.makeText(requireContext(), "Email atau Password Masih Salah", Toast.LENGTH_LONG).show()
+            }else{
+                val username = userDb?.UserDao()?.findUser(dataEmail).toString()
+
+                prefs.edit().putString("PASSWORD", dataPassword).apply()
+                prefs.edit().putString("EMAIL", dataEmail).apply()
+                prefs.edit().putString("USERNAME", username).apply()
+
+                view?.let { Navigation.findNavController(it).navigate(R.id.action_loginFragment_to_homeFragment) }
+            }
+
         }else{
-            Toast.makeText(requireContext(), "Username atau Password Masih Salah", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Email atau Password Masih Salah", Toast.LENGTH_LONG).show()
         }
     }
+
 
 }
